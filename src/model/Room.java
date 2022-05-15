@@ -1,46 +1,46 @@
 package model;
 
 public class Room {
-    private int row;
-    private int col;
-    private boolean explored;
-    Door[] doors;
+    private int myRow;
+    private int myCol;
+    private boolean myExplored;
+    Door[] myDoors;
 
     public Room(int r, int c) {
-      row = r;
-      col = c;
-      doors = new Door[4];
-      explored = false;
+      myRow = r;
+      myCol = c;
+      myDoors = new Door[4];
+      myExplored = false;
     }
 
     public int getRow() {
-      return row;
+      return myRow;
     }
 
     public int getCol() {
-      return col;
+      return myCol;
     }
 
     public boolean equals(Object o) {
       Room r = (Room)o;
-      return (row == r.row && col == r.col);
+      return (myRow == r.myRow && myCol == r.myCol);
     }
 
     public void addDoor(Direction direction, Door door) {
       int index = direction.getIndex();
-      doors[index] = door;
+      myDoors[index] = door;
     }
 
     public door getDoor(Direction direction) {
-      return doors[direction.getIndex()];
+      return myDoors[direction.getIndex()];
     }
 
     public boolean getExplored() {
-      return explored;
+      return myExplored;
     }
 
-    public void setExplored(boolean b) {
-      explored = b;
+    public void setExplored(boolean theExplored) {
+      myExplored = theExplored;
     }
 
 }

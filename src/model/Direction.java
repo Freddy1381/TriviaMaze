@@ -1,25 +1,18 @@
 package model;
 
 public enum Direction {
-  NORTH(0, Direction.SOUTH),
-  EAST(1, Direction.WEST),
-  SOUTH(2, Direction.NORTH),
-  WEST(3, Direction.EAST);
+  NORTH(0),
+  EAST(1),
+  SOUTH(2),
+  WEST(3);
 
-  private int index;
-  private Direction opposite;
+  private int myIndex;
 
-  Direction(int i, Direction d) {
-    index = i;
-    opposite = d;
+  Direction(int theIndex) {
+    myIndex = theIndex;
   }
 
   public int getIndex() {
-    return index;
+    return myIndex;
   }
-
-  public Direction getOpposite() {
-    return opposite;
-  }
-
 }

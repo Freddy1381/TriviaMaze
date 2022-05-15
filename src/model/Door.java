@@ -2,36 +2,36 @@ package model;
 
 public class Door {
     private Question myQuestion;
-    private DoorStatus doorStatus;
+    private DoorStatus myDoorStatus;
 
-    public Door(Question question) {
-      myQuestion = question;
-      doorStatus = DoorStatus.LOCKED;
+    public Door(Question theQuestion) {
+      myQuestion = theQuestion;
+      myDoorStatus = DoorStatus.LOCKED;
     }
 
     public DoorStatus getStatus() {
-      return doorStatus;
+      return myDoorStatus;
     }
 
     public boolean isOpen() {
-      return doorStatus == DoorStatus.OPEN;
+      return myDoorStatus == DoorStatus.OPEN;
     }
 
     public boolean isLocked() {
-      return doorStatus == DoorStatus.LOCKED;
+      return myDoorStatus == DoorStatus.LOCKED;
     }
 
     public boolean isGone() {
-      return doorStatus == DoorStatus.GONE;
+      return myDoorStatus == DoorStatus.GONE;
     }
 
     public void open(String userAnswer) {
-      if (doorStatus == DoorStatus.LOCKED) {
+      if (myDoorStatus == DoorStatus.LOCKED) {
         if (myQuestion.validate(userAnswer)) {
-          doorStatus = DoorStatus.OPEN;
+          myDoorStatus = DoorStatus.OPEN;
         }
         else {
-          doorStatus = DoorStatus.GONE;
+          myDoorStatus = DoorStatus.GONE;
         }
       }
     }
@@ -41,6 +41,6 @@ public class Door {
     }
 
     public cheatOpen() {
-      doorStatus = DoorStatus.OPEN;
+      myDoorStatus = DoorStatus.OPEN;
     }
 }

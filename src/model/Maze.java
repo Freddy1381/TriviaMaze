@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Maze {
-    private Room startRoom;
-    private Room endRoom;
-    private Room currentRoom;
+    private Room myStartRoom;
+    private Room myEndRoom;
+    private Room myCurrentRoom;
     private ArrayList<Question> myQuestions;
     private Room[][] myMaze;
 
-    public Maze(int rows, int cols, ArrayList<Question> questions) {
-      myQuestions = questions;
+    public Maze(int rows, int cols, ArrayList<Question> theQuestions) {
+      myQuestions = theQuestions;
       Collections.shuffle(myQuestions);
       myMaze = new Room[rows][cols];
 
@@ -23,29 +23,29 @@ public class Maze {
 
       connectRooms();
 
-      startRoom = myMaze[0][0];
-      currentRoom = myMaze[0][0];
-      endRoom = myMaze[myMaze.length - 1][myMaze[0].length - 1];
+      myStartRoom = myMaze[0][0];
+      myCurrentRoom = myMaze[0][0];
+      myEndRoom = myMaze[myMaze.length - 1][myMaze[0].length - 1];
     }
 
     public boolean gameWon() {
-      return currentRoom.equals(endRoom);
+      return myCurrentRoom.equals(myEndRoom);
     }
 
     public Room getStartRoom() {
-      return startRoom;
+      return myStartRoom;
     }
 
     public Room getEndRoom() {
-      return endRoom;
+      return myEndRoom;
     }
 
     public Room getCurrentRoom() {
-      return currentRoom;
+      return myCurrentRoom;
     }
 
     public void setCurrentRoom(int r, int c) {
-      currentRoom = myMaze[r][c];
+      myCurrentRoom = myMaze[r][c];
     }
 
     public Room[][] getMaze() {
@@ -54,17 +54,17 @@ public class Maze {
 
     public boolean gameLost() {
       resetExplored();
-      return !(hasPathToEnd(currentRoom));
+      return !(hasPathToEnd(myCurrentRoom));
     }
 
     public void cheatWin() {
-      currentRoom = endRoom;
+      myCurrentRoom = myEndRoom;
     }
 
     // call this method before checking canMove. Will return true if the unlock method successfully
     // unlocked this door, or else it will return false.
     public boolean unlock(Direction direction, String userAnswer) {
-      Door door = currentRoom.getDoor(direction);
+      Door door = myCurrentRoom.getDoor(direction);
       if (door != null && !door.isGone()) {
         if (door.isOpen())
           return true;
@@ -78,7 +78,7 @@ public class Maze {
     // true if this move is within bounds of the maze AND if this door is unlocked currently,
     // false otherwise
     public boolean canMove(Direction direction) {
-      Door door = currentRoom.getDoor(direction);
+      Door door = myCurrentRoom.getDoor(direction);
       return door != null && door.isOpen();
     }
 
@@ -87,20 +87,20 @@ public class Maze {
     public void movePlayer(Direction direction) {
       if (canMove(direction)) {
         if (direction == Direction.NORTH) {
-          Room above = getRoomAbove(currentRoom);
-          currentRoom = above;
+          Room above = getRoomAbove(myCurrentRoom);
+          myCurrentRoom = above;
         }
         else if (direction == Direction.EAST) {
-          Room right = getRoomRight(currentRoom);
-          currentRoom = right;
+          Room right = getRoomRight(myCurrentRoom);
+          myCurrentRoom = right;
         }
         else if (direction == Direction.SOUTH) {
-          Room below = getRoomBelow(currentRoom);
-          currentRoom = below;
+          Room below = getRoomBelow(myCurrentRoom);
+          myCurrentRoom = below;
         }
         else {
-          Room left = getRoomLeft(currentRoom);
-          currentRoom = left;
+          Room left = getRoomLeft(myCurrentRoom);
+          myCurrentRoom = left;
         }
       }
     }
@@ -167,7 +167,7 @@ public class Maze {
 
     private boolean hasPathToEnd(Room room) {
       if (!room.getExplored()) {
-        if (room.equals(endRoom))
+        if (room.equals(myEndRoom))
           return true;
 
         room.setExplored(true);
