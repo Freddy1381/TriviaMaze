@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controller.AnswerPanel;
-import model.Maze;
+//import model.Maze;
 import res.R;
 
 /**

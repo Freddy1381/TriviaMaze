@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import res.R;
 
-import model.Maze;
+//import model.Maze;
 
 public class MazePanel extends JPanel {
 	
