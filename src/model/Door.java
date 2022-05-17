@@ -1,46 +1,69 @@
 package model;
 
 public class Door {
-    private Question myQuestion;
-    private DoorStatus doorStatus;
+	
+	private Room mySource, myDest;
+	private DoorStatus myDoorStatus;
 
-    public Door(Question question) {
-      myQuestion = question;
-      doorStatus = DoorStatus.LOCKED;
-    }
+	public Door(Room theSource, Room theDest) {
+		mySource = theSource;
+		myDest = theDest;
+		myDoorStatus = DoorStatus.LOCKED;
+	}
 
-    public DoorStatus getStatus() {
-      return doorStatus;
-    }
+	public DoorStatus getStatus() {
+		return myDoorStatus;
+	}
+	
+	public Room getSource() {
+		return mySource;
+	}
+	
+	public Room getDest() {
+		return myDest;
+	}
+	
+	public void setStatus(DoorStatus theStatus) {
+		myDoorStatus = theStatus;
+	}
 
-    public boolean isOpen() {
-      return doorStatus == DoorStatus.OPEN;
-    }
+	public boolean isOpen() {
+		return myDoorStatus == DoorStatus.OPEN;
+	}
 
-    public boolean isLocked() {
-      return doorStatus == DoorStatus.LOCKED;
-    }
+	public boolean isLocked() {
+		return myDoorStatus == DoorStatus.LOCKED;
+	}
 
-    public boolean isGone() {
-      return doorStatus == DoorStatus.GONE;
-    }
-
-    public void open(String userAnswer) {
-      if (doorStatus == DoorStatus.LOCKED) {
-        if (myQuestion.validate(userAnswer)) {
-          doorStatus = DoorStatus.OPEN;
-        }
-        else {
-          doorStatus = DoorStatus.GONE;
-        }
-      }
-    }
-
-    public Question getQuestion() {
-      return myQuestion;
-    }
-
-    public cheatOpen() {
-      doorStatus = DoorStatus.OPEN;
-    }
+	public boolean isDEAD() {
+		return myDoorStatus == DoorStatus.DEAD;
+	}
+	
+	@Override
+	public boolean equals(final Object theObject) {
+		if (this == theObject) {
+			return true;
+		}
+		if (theObject == null || theObject.getClass() != this.getClass()) {
+			return false;
+		}
+		Door obj = (Door) theObject;
+		return (obj.mySource.equals(this.myDest) && obj.myDest.equals(this.mySource));
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 0;
+		result =  this.mySource.hashCode() + this.myDest.hashCode();
+		return result;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Door to: ");
+		builder.append(myDest.toString());
+		builder.append(". ");
+		return builder.toString();
+	}
 }

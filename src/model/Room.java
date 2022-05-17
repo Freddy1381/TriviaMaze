@@ -1,46 +1,55 @@
 package model;
 
 public class Room {
-    private int row;
-    private int col;
-    private boolean explored;
-    Door[] doors;
+	
+	private boolean myIsRoomDead;
+	private boolean myIsExplored;
+	private final Location myRoomLocation;
+	
+	public Room(final Location theLocation) {
+		this.myRoomLocation = theLocation;
+		myIsRoomDead = false;
+		myIsExplored = false;
+	}
+	
+	public boolean isRoomDead() {
+		return this.myIsRoomDead;
+	}
+	
+	public boolean isExplored() {
+		return this.myIsExplored;
+	}
 
-    public Room(int r, int c) {
-      row = r;
-      col = c;
-      doors = new Door[4];
-      explored = false;
-    }
-
-    public int getRow() {
-      return row;
-    }
-
-    public int getCol() {
-      return col;
-    }
-
-    public boolean equals(Object o) {
-      Room r = (Room)o;
-      return (row == r.row && col == r.col);
-    }
-
-    public void addDoor(Direction direction, Door door) {
-      int index = direction.getIndex();
-      doors[index] = door;
-    }
-
-    public door getDoor(Direction direction) {
-      return doors[direction.getIndex()];
-    }
-
-    public boolean getExplored() {
-      return explored;
-    }
-
-    public void setExplored(boolean b) {
-      explored = b;
-    }
-
+	public Location getRoomLocation() {
+		return this.myRoomLocation;
+	}
+	
+	@Override
+	public boolean equals(final Object theObject) {
+		if (this == theObject) {
+			return true;
+		}
+		if (theObject == null || theObject.getClass() != this.getClass()) {
+			return false;
+		}
+		Room obj = (Room) theObject;
+		return obj.myRoomLocation.equals(this.myRoomLocation);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 0;
+		result = prime * this.myRoomLocation.hashCode();
+		return result;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Room: ");
+		builder.append(myRoomLocation.toString());
+		builder.append(" ");
+		return builder.toString();
+	}
 }
