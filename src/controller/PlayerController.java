@@ -1,13 +1,20 @@
 package controller;
 
-import model.Maze;
-import view.Display;
+import java.awt.LayoutManager;
+
+//import model.*;
 
 public class PlayerController {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
+//	private Location myCurrentLocation;
+
+	public PlayerController(String theMove) {
+		// TODO Auto-generated constructor stub
 	}
 
+	public LayoutManager updateMazePanel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

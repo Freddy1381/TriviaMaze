@@ -1,7 +1,5 @@
 package model;
 
 public enum DoorStatus {
-  OPEN,
-  LOCKED,
-  GONE
+	OPEN, LOCKED, DEAD
 }
