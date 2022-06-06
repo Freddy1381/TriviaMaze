@@ -1,34 +1,28 @@
 package model;
 
-public class Door {
-	
-	private Room mySource;
-	private DoorStatus myDoorStatus;
-	private Direction myDoorDirection;
-	
-	public Door(Room theSource, Direction theDirection) {
-		mySource = theSource;
-		myDoorStatus = DoorStatus.LOCKED;
-		myDoorDirection = theDirection;
-	}
+import java.io.Serializable;
 
-	public Door(Room theSource, Room theDest, Direction theDirection) {
-		// TODO Auto-generated constructor stub
-		mySource = theSource;
-		myDoorStatus = DoorStatus.LOCKED;
-		myDoorDirection = theDirection;
+public class Door implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final Location myLocation;
+	private DoorStatus myDoorStatus;
+	private Question myQuestion;
+	
+	public Door(final Location theLocation) {
+		this.myLocation = theLocation;
+		this.myDoorStatus = DoorStatus.LOCKED;
 	}
 
 	public DoorStatus getStatus() {
 		return myDoorStatus;
 	}
 	
-	public Room getSource() {
-		return mySource;
-	}
-	
-	public Direction getDirection() {
-		return myDoorDirection;
+	public Location getDoorLocation() {
+		return myLocation;
 	}
 	
 	public void setStatus(DoorStatus theStatus) {
@@ -47,6 +41,14 @@ public class Door {
 		return myDoorStatus == DoorStatus.DEAD;
 	}
 	
+	public void setQuestion(final Question theQuestion) {
+		this.myQuestion = theQuestion;
+	}
+	
+	public Question getQuestion() {
+		return myQuestion;
+	}
+	
 	@Override
 	public boolean equals(final Object theObject) {
 		if (this == theObject) {
@@ -56,27 +58,24 @@ public class Door {
 			return false;
 		}
 		Door obj = (Door) theObject;
-		return (obj.mySource.equals(this.mySource) && obj.myDoorDirection.equals(this.myDoorDirection));
+		return (obj.myLocation.equals(this.myLocation));
 	}
 	
 	@Override
 	public int hashCode() {
 		int result = 0;
-		result =  this.mySource.hashCode();
+		result =  this.myLocation.hashCode();
 		return result;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Door from: ");
-		builder.append(mySource.toString());
+		builder.append("Door at: ");
+		builder.append(myLocation.toString());
 		builder.append(". ");
+		builder.append("Question is: ");
+		builder.append(this.getQuestion().toString());
 		return builder.toString();
-	}
-
-	public Room getDest() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

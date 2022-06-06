@@ -8,6 +8,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Queue;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,6 +21,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import controller.QuestionGetter;
+import controller.QuestionSaver;
+import model.Maze;
+import model.Question;
+import model.Sound;
 import res.R;
 
 /**
@@ -49,6 +59,8 @@ public class MainMenuFrame extends JFrame {
 	/** The button used to trigger about menu. */
 	private final JButton myAboutBtn;
 	
+	private final JButton myAddBtn;
+	
 	/** The panel that holds the buttons. */
 	private final JPanel myButtonPanel;
 
@@ -64,6 +76,7 @@ public class MainMenuFrame extends JFrame {
 		myLoadGameBtn = new JButton(R.Strings.MMF_LOAD_GAME_BTN);
 		myHelpBtn = new JButton(R.Strings.MMF_HELP_BTN);
 		myAboutBtn = new JButton(R.Strings.MMF_ABOUT_BTN);
+		myAddBtn = new JButton(R.Strings.MMF_ADD_BTN);
 
 		myButtonPanel = new JPanel();
 
@@ -98,22 +111,31 @@ public class MainMenuFrame extends JFrame {
 				R.Dimensions.V_PADDING, R.Dimensions.H_PADDING));
 		myButtonPanel.setBackground(R.Colors.MMF_BG);
 
+		myPlayGameBtn.setFont(R.Fonts.BUTTON_FONT);
 		myPlayGameBtn.setForeground(R.Colors.TEXT_COLOR);
 		myPlayGameBtn.setBackground(R.Colors.MMF_BUTTON_BG);
 		myButtonPanel.add(myPlayGameBtn);
 
+		myLoadGameBtn.setFont(R.Fonts.BUTTON_FONT);
 		myLoadGameBtn.setForeground(R.Colors.TEXT_COLOR);
 		myLoadGameBtn.setBackground(R.Colors.MMF_BUTTON_BG);
 		myButtonPanel.add(myLoadGameBtn);
 
+		myHelpBtn.setFont(R.Fonts.BUTTON_FONT);
 		myHelpBtn.setForeground(R.Colors.TEXT_COLOR);
 		myHelpBtn.setBackground(R.Colors.MMF_BUTTON_BG);
 		myButtonPanel.add(myHelpBtn);
 		
+		myAboutBtn.setFont(R.Fonts.BUTTON_FONT);
 		myAboutBtn.setForeground(R.Colors.TEXT_COLOR);
 		myAboutBtn.setBackground(R.Colors.MMF_BUTTON_BG);
 		myButtonPanel.add(myAboutBtn);
-
+		
+		myAddBtn.setFont(R.Fonts.BUTTON_FONT);
+		myAddBtn.setForeground(R.Colors.TEXT_COLOR);
+		myAddBtn.setBackground(R.Colors.MMF_BUTTON_BG);
+		myButtonPanel.add(myAddBtn);
+		
 		pane.add(myButtonPanel, BorderLayout.CENTER);
 
 		setContentPane(pane);
@@ -127,6 +149,7 @@ public class MainMenuFrame extends JFrame {
 		myLoadGameBtn.addActionListener(this::loadGameBtnAction);
 		myHelpBtn.addActionListener(this::helpBtnAction);
 		myAboutBtn.addActionListener(this::aboutBtnAction);
+		myAddBtn.addActionListener(this:: addBtnAction);
 	}
 
 	/**
@@ -146,13 +169,24 @@ public class MainMenuFrame extends JFrame {
      * the user presses the "New Game" button.
      * 
      * @param theEvent the ActionEvent that triggered this method.
+	 * @throws Exception 
      * @throws IllegalStateException when the component is not a JButton
      */
 	private void playGameBtnAction(final ActionEvent theEvent) {
 		if (theEvent.getSource().getClass() != JButton.class) {
             throw new IllegalStateException(R.Strings.ERROR_MSG_ILLEGAL_INVOKE);
         }
-		GameFrame window = new GameFrame();
+		Sound.playSound(R.Files.START_SOUND);
+		Queue<Question> questions = null;
+		try {
+			QuestionGetter getter = new QuestionGetter();
+			questions = getter.getQuestionList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Maze maze = new Maze(questions);
+		GameFrame window = new GameFrame(maze);
 		window.setVisible(true);
 		this.setVisible(false);
 	}
@@ -168,7 +202,8 @@ public class MainMenuFrame extends JFrame {
 		if (theEvent.getSource().getClass() != JButton.class) {
             throw new IllegalStateException(R.Strings.ERROR_MSG_ILLEGAL_INVOKE);
         }
-		SavedGameFrame window = new SavedGameFrame();
+		Sound.playSound(R.Files.START_SOUND);
+		GameFrame window = startSavedGame();
 		window.setVisible(true);
 		this.setVisible(false);
 	}
@@ -199,5 +234,43 @@ public class MainMenuFrame extends JFrame {
             throw new IllegalStateException(R.Strings.ERROR_MSG_ILLEGAL_INVOKE);
         }
 		JOptionPane.showMessageDialog(this, R.Strings.MMF_ABOUT_MSG);
+	}
+	
+	/**
+     * Event handler for the Add Button. This method is implicitly called when
+     * the user presses the "Add" button.
+     * 
+     * @param theEvent the ActionEvent that triggered this method.
+     * @throws IllegalStateException when the component is not a JButton
+     */
+	private void addBtnAction(final ActionEvent theEvent) {
+		if (theEvent.getSource().getClass() != JButton.class) {
+            throw new IllegalStateException(R.Strings.ERROR_MSG_ILLEGAL_INVOKE);
+        }
+		try {
+			new QuestionSaver();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private GameFrame startSavedGame() {
+		Maze maze = null;
+		try {
+			File file = new File(R.Strings.FILE_LOCATION + R.Strings.SAVE_FILE);
+			FileInputStream fileIn = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			maze = (Maze) in.readObject();
+			in.close();
+			fileIn.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, R.Strings.LOAD_IO_MSG, "Alert", JOptionPane.WARNING_MESSAGE);
+		} catch (ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(this, R.Strings.LOAD_CLASS_MSG, "Alert", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		GameFrame window = new GameFrame(maze);
+		return window;
 	}
 }

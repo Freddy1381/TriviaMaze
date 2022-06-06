@@ -25,7 +25,8 @@ public final class TriviaMaze {
 	}
 	
 	/**
-	 * The main method, invokes the MainMenuFrame. 
+	 * The main method, prepare the questions from a txt file to a sqlite database. 
+	 * Invokes the MainMenuFrame. 
 	 * 
 	 * @param theArgs Command line arguments.
 	 */

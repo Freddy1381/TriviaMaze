@@ -1,8 +1,14 @@
 package model;
 
-public class Location {
-	private int myX;
-	private int myY;
+import java.io.Serializable;
+
+public class Location implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final int myX;
+	private final int myY;
 
 	public Location(final int theX, final int theY) {
 		this.myX = theX;

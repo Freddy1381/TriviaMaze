@@ -1,23 +1,17 @@
 package model;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
 	
-	private boolean myIsRoomDead;
-	private boolean myIsTraversed;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Location myRoomLocation;
 	
 	public Room(final Location theLocation) {
 		this.myRoomLocation = theLocation;
-		myIsRoomDead = false;
-		myIsTraversed = false;
-	}
-	
-	public boolean isRoomDead() {
-		return this.myIsRoomDead;
-	}
-	
-	public boolean isTraversed() {
-		return this.myIsTraversed;
 	}
 
 	public Location getRoomLocation() {
