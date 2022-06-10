@@ -1,3 +1,7 @@
+/*
+ * TCSS 360 Trivia Maze
+ */
+
 package controller;
 
 import java.sql.Connection;
@@ -11,24 +15,45 @@ import model.MCQuestion;
 import model.Question;
 import res.R;
 
+/**
+ * A controller object that is in charge of getting questions from the database.
+ * 
+ * @author Zhaoyu Xu
+ * @version 2.1
+ */
 public class QuestionGetter {
-	
+
+	/** The connection. */
 	private ConnectionManager myCM;
+
+	/** A queue stored with all questions. */
 	private Queue<Question> myQuestions;
-	
+
+	/**
+	 * Initialize the questiongetter object. Setup the connection and requests
+	 * questions from database.
+	 * 
+	 * @throws Exception
+	 */
 	public QuestionGetter() throws Exception {
 		myCM = new ConnectionManager(R.Strings.SQL_DATABASE_URL);
 		myQuestions = requestQuestions();
 	}
 
+	/**
+	 * Request questions from the database and store in a queue. Close all resources
+	 * when completed.
+	 * 
+	 * @return result the queue with all the questions.
+	 */
 	private Queue<Question> requestQuestions() {
 		// TODO Auto-generated method stub
-		Queue<Question> result = new LinkedList<Question>();
+		Queue<Question> result = new LinkedList<>();
 		Question q = null;
 		Connection c = myCM.getConnection();
 		Statement s = null;
 		ResultSet rs = null;
-		
+
 		try {
 			s = c.createStatement();
 			String sql = "SELECT * FROM Questions";
@@ -40,9 +65,9 @@ public class QuestionGetter {
 				String hint = rs.getString("Hint");
 				String options = rs.getString("Options");
 				switch (type) {
-				case "Short Answer": 
+				case R.Strings.QUESTION_TYPE_SA:
 					q = new Question(type, question, correctAnswer, hint);
-				default: 
+				default:
 					q = new MCQuestion(type, question, correctAnswer, hint, options);
 				}
 				result.add(q);
@@ -76,10 +101,15 @@ public class QuestionGetter {
 				}
 			}
 		}
-		
+
 		return result;
 	}
-	
+
+	/**
+	 * Getter for the question queue.
+	 * 
+	 * @return the questions queue
+	 */
 	public Queue<Question> getQuestionList() {
 		return myQuestions;
 	}
