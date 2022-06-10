@@ -1,40 +1,52 @@
+/*
+ * TCSS 360 Trivia Maze
+ */
+
 package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
+/**
+ * A child class of Question.
+ *
+ * @author Zhaoyu Xu
+ * @version 1.0
+ */
 public class MCQuestion extends Question implements Serializable {
-	
-	/**
-	 * 
-	 */
+
+	/** The Serialization ID. */
 	private static final long serialVersionUID = 1L;
-	
+
+	/** An ArrayList of all options of a multiple choice question. */
 	private ArrayList<String> myOptions;
 
-	public MCQuestion(final String theType, final String theQuestion, 
-					  final String theCorrectAns, final String theHint, 
-					  final String theOptions) {
+	/**
+	 * Constructor of multiple choice question.
+	 *
+	 * @param theType       type of the question
+	 * @param theQuestion   name of the question
+	 * @param theCorrectAns correct answer of the question
+	 * @param theHint       hint of the question
+	 * @param theOptions    options of the question
+	 */
+	public MCQuestion(final String theType, final String theQuestion, final String theCorrectAns, final String theHint,
+			final String theOptions) {
 		super(theType, theQuestion, theCorrectAns, theHint);
-		// TODO Auto-generated constructor stub
-		this.myOptions = super.convertStringToArray(theOptions);
+		if (theOptions.isEmpty()) {
+			throw new IllegalArgumentException("Options can't be empty.");
+		}
+		this.myOptions = super.convertStringToArray(Objects.requireNonNull(theOptions));
 	}
-	
+
+	/**
+	 * Returns an ArrayList of all options to a question.
+	 *
+	 * @return an ArrayList of options
+	 */
 	public ArrayList<String> getOptions() {
 		return myOptions;
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "Options: " + myOptions.toString();
-	}
-	
-	public static void main(String[] args) {
-		MCQuestion mc = new MCQuestion("Multiple Choice", "What is my name?", 
-										"Fred", "This is a hint", 
-										"Jeff Fred Brandon Nomad");
-		System.out.println(mc.toString());
-		System.out.println(mc.getOptions().toString());
 	}
 
 }
